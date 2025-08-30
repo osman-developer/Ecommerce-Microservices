@@ -1,0 +1,36 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# Publish output
+publish/
+dist/
+
+# Frontend (Angular/React)
+node_modules/
+dist/
+build/
+
+# Rider / JetBrains
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.secret.json
