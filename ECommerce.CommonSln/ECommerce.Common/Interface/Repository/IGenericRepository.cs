@@ -1,15 +1,17 @@
 ﻿using System.Linq.Expressions;
+using ECommerce.Common.Entities;
 using ECommerce.Common.Response;
 
 namespace ECommerce.Common.Interface.Repository
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository<T> where T : BaseEntity
     {
+        Task<Response<T>> GetByIdAsync(int id);
         Task<Response<T>> CreateAsync(T entity);
         Task<Response<T>> UpdateAsync(T entity);
-        Task<Response<Unit>> DeleteAsync(T entity);
+        Task<Response<Unit>> DeleteAsync(int id);
         Task<Response<IEnumerable<T>>> GetAllAsync();
-        Task<Response<T>> GetByIdAsync(int id);
-        Task<Response<T>> GetByAsync(Expression<Func<T, bool>> predicate);
+        Task<Response<IEnumerable<T>>> FindByAsync(Expression<Func<T, bool>> predicate);
+
     }
 }
