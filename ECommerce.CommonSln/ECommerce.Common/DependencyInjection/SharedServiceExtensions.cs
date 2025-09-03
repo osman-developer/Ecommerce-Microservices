@@ -29,15 +29,7 @@ namespace ECommerce.Common.DependencyInjection
         {
             //Add Generic Database Context
             services.AddDbContextPool<TContext>(option => option.UseSqlServer(
-                config.GetConnectionString("ConnectionString"), sqlserverOption => sqlserverOption.EnableRetryOnFailure()));
-
-            return services;
-        }
-
-        public static IServiceCollection AddJwtAuthenticationScheme(this IServiceCollection services, IConfiguration config)
-        {
-            //Add Jwt Authentication Scheme extensions
-            JwtAuthenticationExtensions.AddJwtAuthentication(services, config);
+                config.GetConnectionString("ConnectionStrings"), sqlserverOption => sqlserverOption.EnableRetryOnFailure()));
 
             return services;
         }

@@ -79,7 +79,7 @@ namespace ECommerce.Product.Infrastructure.Repository
         {
             try
             {
-                var entities = await _dbSet.ToListAsync();
+                var entities = await _dbSet.AsNoTracking().ToListAsync();
                 if (entities == null || !entities.Any())
                     return Response<IEnumerable<T>>.Ok(new List<T>(), "No records found.");
 
