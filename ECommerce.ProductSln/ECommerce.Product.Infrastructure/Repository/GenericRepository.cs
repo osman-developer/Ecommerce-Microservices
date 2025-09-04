@@ -10,10 +10,11 @@ namespace ECommerce.Product.Infrastructure.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly DbContext _context;
+        private readonly ProductDbContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly ILogger<GenericRepository<T>> _logger;
-        public GenericRepository(DbContext context, ILogger<GenericRepository<T>> logger)
+
+        public GenericRepository(ProductDbContext context, ILogger<GenericRepository<T>> logger)
         {
             _context = context;
             _dbSet = _context.Set<T>();

@@ -29,7 +29,7 @@ namespace ECommerce.Common.DependencyInjection
         {
             //Add Generic Database Context
             services.AddDbContextPool<TContext>(option => option.UseSqlServer(
-                config.GetConnectionString("ConnectionStrings"), sqlserverOption => sqlserverOption.EnableRetryOnFailure()));
+                config.GetConnectionString("DefaultConnection"), sqlserverOption => sqlserverOption.EnableRetryOnFailure()));
 
             return services;
         }

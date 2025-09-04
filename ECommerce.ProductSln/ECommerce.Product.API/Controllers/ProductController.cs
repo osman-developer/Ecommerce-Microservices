@@ -21,9 +21,7 @@ namespace ECommerce.Product.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _productService.GetAll();
-            return result.Success
-                ? Ok(result)
-                : BadRequest(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         // GET: api/product/{id}
@@ -31,9 +29,7 @@ namespace ECommerce.Product.API.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var result = await _productService.Get(id);
-            return result.Success
-                ? Ok(result)
-                : NotFound(result);
+            return result.Success ? Ok(result) : NotFound(result);
         }
 
         // POST: api/product/save
@@ -44,9 +40,7 @@ namespace ECommerce.Product.API.Controllers
                 return BadRequest(Response<GetProductDTO>.Fail("Invalid input."));
 
             var result = await _productService.Save(dto);
-            return result.Success
-                ? Ok(result)
-                : BadRequest(result);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         // DELETE: api/product/{id}
@@ -54,9 +48,7 @@ namespace ECommerce.Product.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _productService.Delete(id);
-            return result.Success
-                ? Ok(result)
-                : NotFound(result);
+            return result.Success ? Ok(result) : NotFound(result);
         }
     }
 }
