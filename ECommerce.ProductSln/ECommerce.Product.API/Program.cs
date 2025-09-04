@@ -1,4 +1,4 @@
-using ECommerce.Product.Infrastructure.DependencyInjection;
+﻿using ECommerce.Product.Infrastructure.DependencyInjection;
 using ECommerce.Product.Service.DependencyInjection;
 using ECommerce.Common.Middleware;
 using Serilog;
@@ -7,11 +7,14 @@ using ECommerce.Common.LogConfiguration;
 var builder = WebApplication.CreateBuilder(args);
 
 
+// ─── Configure Logging ──────────────────────────────────────────────
 //serilog registeration
-var logFileName = builder.Configuration.GetSection("SeriLog")["FileName"] ?? "Logs/log"; ;
+var logFileName = builder.Configuration["SeriLog:FileName"] ?? "Logs/log"; 
 var logger = SerilogConfiguration.ConfigureSerilog(logFileName);
 builder.Host.UseSerilog(logger);
 
+
+// ─── DI Register Services ──────────────────────────────────────────────
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,8 +25,12 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 //Register service layer services (e.g., product, automapper)
 builder.Services.AddServices(builder.Configuration);
 
+
+// ─── Build App ──────────────────────────────────────────────────────
 var app = builder.Build();
 
+
+// ─── Middleware Pipeline ──────────────────────────────────────────── 
 app.UseSerilogRequestLogging();
 var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 app.UseSharedMiddlewares(loggerFactory);
@@ -41,6 +48,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+// ─── Run App ────────────────────────────────────────────────────────
 try
 {
     app.Run();
