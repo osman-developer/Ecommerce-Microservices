@@ -10,10 +10,6 @@ namespace ECommerce.Product.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
         {
-            // Add Serilog 
-            var fileName = config.GetSection("SeriLog")["FileName"];
-            SharedServiceExtensions.AddSerilogLogging(services, fileName);
-
             // Add Database Connectivity
             SharedServiceExtensions.AddAppDbContext<ProductDbContext>(services, config);
 
