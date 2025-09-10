@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ECommerce.Order.Infrastructure
 {
-    internal class OrderDbContext : DbContext
+    public class OrderDbContext : DbContext
     {
   
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options)

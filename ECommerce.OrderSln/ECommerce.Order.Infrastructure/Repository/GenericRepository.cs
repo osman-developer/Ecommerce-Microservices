@@ -6,15 +6,15 @@ using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 
-namespace ECommerce.Product.Infrastructure.Repository
+namespace ECommerce.Order.Infrastructure.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly ProductDbContext _context;
+        private readonly OrderDbContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly ILogger<GenericRepository<T>> _logger;
 
-        public GenericRepository(ProductDbContext context, ILogger<GenericRepository<T>> logger)
+        public GenericRepository(OrderDbContext context, ILogger<GenericRepository<T>> logger)
         {
             _context = context;
             _dbSet = _context.Set<T>();
@@ -55,7 +55,6 @@ namespace ECommerce.Product.Infrastructure.Repository
                 return Response<T>.Fail(ex.Message);
             }
         }
-
 
         public async Task<Response<Unit>> DeleteAsync(int id)
         {
@@ -126,7 +125,7 @@ namespace ECommerce.Product.Infrastructure.Repository
             }
         }
 
-        public async Task<Response<IEnumerable<T>>> GetIncludingAsync(Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] includes)
+        public async Task<Response<IEnumerable<T>>> GetIncludingAsync(Expression<Func<T, bool>>? filter = null,params Expression<Func<T, object>>[] includes)
         {
             try
             {
@@ -160,6 +159,7 @@ namespace ECommerce.Product.Infrastructure.Repository
                 return Response<IEnumerable<T>>.Fail(ex.Message);
             }
         }
+
 
     }
 }
