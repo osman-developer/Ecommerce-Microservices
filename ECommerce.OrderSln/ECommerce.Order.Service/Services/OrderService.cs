@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ECommerce.Common.DTOs.AppUser;
 using ECommerce.Common.Interface.Repository;
 using ECommerce.Common.Response;
 using ECommerce.Order.Domain.DTOs.Order;
@@ -8,8 +7,6 @@ using ECommerce.Order.Domain.Entities;
 using ECommerce.Order.Domain.Interfaces.Services;
 using ECommerce.Order.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
-using System.Net.Http.Json;
 
 namespace ECommerce.Order.Service.Services
 {
