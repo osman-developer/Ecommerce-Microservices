@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECommerce.Product.Domain.DTOs.Product;
+using ECommerce.Product.Domain.DTOs.Core.Product;
 using ECommerce.Product.Domain.Entities;
 
 namespace ECommerce.Product.Domain.Helpers

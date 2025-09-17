@@ -1,7 +1,7 @@
-﻿using ECommerce.Order.Domain.DTOs.Order;
-using ECommerce.Order.Domain.Interfaces.Services;
+﻿using ECommerce.Order.Domain.Interfaces.Services;
 using ECommerce.Common.Response;
 using Microsoft.AspNetCore.Mvc;
+using ECommerce.Order.Domain.DTOs.Core.Order;
 
 namespace ECommerce.Order.API.Controllers
 {
@@ -32,7 +32,7 @@ namespace ECommerce.Order.API.Controllers
             var result = await _orderService.Get(id);
             return result.Success ? Ok(result) : NotFound(result);
         }
-        //TODO: Fix the issue on save, it doesnt update orderlines
+       
         // POST: api/purchaseorder/save
         [HttpPost("save")]
         public async Task<IActionResult> Save([FromBody] AddOrUpdatePurchaseOrderDTO dto)

@@ -1,6 +1,6 @@
-﻿using ECommerce.Order.Domain.DTOs.Orderline;
+﻿using ECommerce.Order.Domain.DTOs.Core.Orderline;
 
-namespace ECommerce.Order.Domain.DTOs.Order
+namespace ECommerce.Order.Domain.DTOs.Core.Order
 {
     public record GetPurchaseOrderDTO
     (

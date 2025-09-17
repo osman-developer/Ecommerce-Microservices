@@ -1,5 +1,5 @@
 ﻿using ECommerce.Common.Response;
-using ECommerce.Product.Domain.DTOs.Product;
+using ECommerce.Product.Domain.DTOs.Core.Product;
 
 namespace ECommerce.Product.Domain.Interfaces.Services
 {

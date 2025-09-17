@@ -1,11 +1,11 @@
 ﻿using ECommerce.Common.Response;
-using ECommerce.Product.Domain.DTOs.Product;
+using ECommerce.Product.Domain.DTOs.Core.Product;
 using ECommerce.Product.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Product.API.Controllers
+namespace ECommerce.Product.API.Controllers.Core
 {
-    [Route("api/[controller]")]
+    [Route("api/core/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {

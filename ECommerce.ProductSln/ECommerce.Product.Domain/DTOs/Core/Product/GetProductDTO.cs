@@ -1,5 +1,4 @@
-﻿
-namespace ECommerce.Product.Domain.DTOs.Product
+﻿namespace ECommerce.Product.Domain.DTOs.Core.Product
 {
     public record GetProductDTO
      (

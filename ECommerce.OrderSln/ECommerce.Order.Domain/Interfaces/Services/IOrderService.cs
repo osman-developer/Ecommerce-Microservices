@@ -1,7 +1,7 @@
 ﻿
 using ECommerce.Common.Response;
-using ECommerce.Order.Domain.DTOs.Order;
-using ECommerce.Order.Domain.DTOs.Orderline;
+using ECommerce.Order.Domain.DTOs.Core.Order;
+using ECommerce.Order.Domain.DTOs.Core.Orderline;
 
 namespace ECommerce.Order.Domain.Interfaces.Services
 {

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using ECommerce.Common.Interface.Repository;
 using ECommerce.Common.Response;
-using ECommerce.Product.Domain.DTOs.Product;
+using ECommerce.Product.Domain.DTOs.Core.Product;
 using ECommerce.Product.Domain.Entities;
 using ECommerce.Product.Domain.Interfaces.Services;
 
-namespace ECommerce.Product.Service.Services
+namespace ECommerce.Product.Service.Services.Core
 {
     public class ProductService : IProductService
     {

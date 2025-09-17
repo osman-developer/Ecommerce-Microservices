@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using ECommerce.Common.Interface.Repository;
 using ECommerce.Common.Response;
-using ECommerce.Order.Domain.DTOs.Order;
-using ECommerce.Order.Domain.DTOs.Orderline;
+using ECommerce.Order.Domain.DTOs.Core.Order;
+using ECommerce.Order.Domain.DTOs.Core.Orderline;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Order.Domain.Interfaces.Services;
 using ECommerce.Order.Infrastructure;
+using ECommerce.Order.Service.Services.Validations.Product;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce.Order.Service.Services
+namespace ECommerce.Order.Service.Services.Core
 {
     public class OrderService : IOrderService
     {
@@ -16,19 +17,19 @@ namespace ECommerce.Order.Service.Services
         private readonly IGenericRepository<OrderLine> _orderLineRepo;
         private readonly IMapper _mapper;
         private readonly OrderDbContext _context;
-        private readonly HttpClient _httpClient;
+        private readonly IProductValidationService _productValidationService;
 
         public OrderService(
             IGenericRepository<PurchaseOrder> orderRepo,
             IGenericRepository<OrderLine> orderLineRepo,
             IMapper mapper,
-            OrderDbContext context, IHttpClientFactory httpClientFactory)
+            OrderDbContext context, IProductValidationService productValidationService)
         {
             _orderRepo = orderRepo;
             _orderLineRepo = orderLineRepo;
             _mapper = mapper;
             _context = context;
-            _httpClient = httpClientFactory.CreateClient("UserService");
+            _productValidationService = productValidationService;
         }
 
         public async Task<Response<GetPurchaseOrderDTO>> Get(int id)
@@ -54,6 +55,10 @@ namespace ECommerce.Order.Service.Services
 
         public async Task<Response<GetPurchaseOrderDTO>> Save(AddOrUpdatePurchaseOrderDTO dto)
         {
+            var validationResult = await _productValidationService.ValidateAsync(dto);
+            if (!validationResult.Success)
+                return Response<GetPurchaseOrderDTO>.Fail(validationResult.Message);
+
             var entity = _mapper.Map<PurchaseOrder>(dto);
 
             if (dto.Id is null)
@@ -63,7 +68,7 @@ namespace ECommerce.Order.Service.Services
                     return Response<GetPurchaseOrderDTO>.Fail(createResult.Message);
 
                 var createdResult = await _orderRepo.GetIncludingAsync(o => o.Id == createResult.Data.Id, o => o.OrderLines);
-                var createdDto = _mapper.Map<GetPurchaseOrderDTO>(createdResult.Data.First());
+                var createdDto = _mapper.Map<GetPurchaseOrderDTO>(createdResult?.Data?.FirstOrDefault());
                 return Response<GetPurchaseOrderDTO>.Ok(createdDto, createResult.Message);
             }
 
@@ -72,9 +77,10 @@ namespace ECommerce.Order.Service.Services
                 return Response<GetPurchaseOrderDTO>.Fail(updateResult.Message);
 
             var updatedResult = await _orderRepo.GetIncludingAsync(o => o.Id == updateResult.Data.Id, o => o.OrderLines);
-            var updatedDto = _mapper.Map<GetPurchaseOrderDTO>(updatedResult.Data.First());
+            var updatedDto = _mapper.Map<GetPurchaseOrderDTO>(updatedResult?.Data?.FirstOrDefault());
             return Response<GetPurchaseOrderDTO>.Ok(updatedDto, updateResult.Message);
         }
+
 
         public async Task<Response<Unit>> Delete(int id)
         {

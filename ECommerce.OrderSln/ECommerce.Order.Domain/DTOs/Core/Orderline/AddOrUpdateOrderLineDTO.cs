@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Order.Domain.DTOs.Orderline
+namespace ECommerce.Order.Domain.DTOs.Core.Orderline
 {
     public record AddOrUpdateOrderLineDTO
   (
