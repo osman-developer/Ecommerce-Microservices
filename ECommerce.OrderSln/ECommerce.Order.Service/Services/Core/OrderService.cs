@@ -54,7 +54,8 @@ namespace ECommerce.Order.Service.Services.Core
         }
 
         public async Task<Response<GetPurchaseOrderDTO>> Save(AddOrUpdatePurchaseOrderDTO dto)
-        {
+        {   
+            //add Validate appuser
             var validationResult = await _productValidationService.ValidateAsync(dto);
             if (!validationResult.Success)
                 return Response<GetPurchaseOrderDTO>.Fail(validationResult.Message);
@@ -89,6 +90,7 @@ namespace ECommerce.Order.Service.Services.Core
 
         public async Task<Response<List<GetPurchaseOrderDTO>>> GetPurchaseOrdersByClientId(int appUserId)
         {
+            //add Validate appuser
             var result = await _orderRepo.GetIncludingAsync(o => o.AppUserId == appUserId, o => o.OrderLines);
             if (!result.Success)
                 return Response<List<GetPurchaseOrderDTO>>.Fail(result.Message);
