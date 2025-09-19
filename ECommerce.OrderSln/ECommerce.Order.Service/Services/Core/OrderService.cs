@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECommerce.Common.DTOs.AppUser;
 using ECommerce.Common.Interface.Repository;
 using ECommerce.Common.Response;
 using ECommerce.Order.Domain.DTOs.Core.Order;
@@ -6,6 +7,7 @@ using ECommerce.Order.Domain.DTOs.Core.Orderline;
 using ECommerce.Order.Domain.Entities;
 using ECommerce.Order.Domain.Interfaces.Services;
 using ECommerce.Order.Infrastructure;
+using ECommerce.Order.Service.Services.Validations.AppUser;
 using ECommerce.Order.Service.Services.Validations.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,18 +20,20 @@ namespace ECommerce.Order.Service.Services.Core
         private readonly IMapper _mapper;
         private readonly OrderDbContext _context;
         private readonly IProductValidationService _productValidationService;
+        private readonly IAppUserValidationService _appUserValidationService;
 
         public OrderService(
             IGenericRepository<PurchaseOrder> orderRepo,
             IGenericRepository<OrderLine> orderLineRepo,
             IMapper mapper,
-            OrderDbContext context, IProductValidationService productValidationService)
+            OrderDbContext context, IProductValidationService productValidationService, IAppUserValidationService appUserValidationService)
         {
             _orderRepo = orderRepo;
             _orderLineRepo = orderLineRepo;
             _mapper = mapper;
             _context = context;
             _productValidationService = productValidationService;
+            _appUserValidationService = appUserValidationService;
         }
 
         public async Task<Response<GetPurchaseOrderDTO>> Get(int id)
@@ -54,11 +58,16 @@ namespace ECommerce.Order.Service.Services.Core
         }
 
         public async Task<Response<GetPurchaseOrderDTO>> Save(AddOrUpdatePurchaseOrderDTO dto)
-        {   
+        {
             //add Validate appuser
-            var validationResult = await _productValidationService.ValidateAsync(dto);
-            if (!validationResult.Success)
-                return Response<GetPurchaseOrderDTO>.Fail(validationResult.Message);
+            var appUserValidationResult = await _appUserValidationService.ValidateAsync(dto.AppUserId);
+            if (!appUserValidationResult.Success)
+                return Response<GetPurchaseOrderDTO>.Fail(appUserValidationResult.Message);
+            
+            //validate product
+            var prodsValidationResult = await _productValidationService.ValidateAsync(dto);
+            if (!prodsValidationResult.Success)
+                return Response<GetPurchaseOrderDTO>.Fail(prodsValidationResult.Message);
 
             var entity = _mapper.Map<PurchaseOrder>(dto);
 
@@ -90,7 +99,11 @@ namespace ECommerce.Order.Service.Services.Core
 
         public async Task<Response<List<GetPurchaseOrderDTO>>> GetPurchaseOrdersByClientId(int appUserId)
         {
-            //add Validate appuser
+            // Validate appuser
+            var appUserValidationResult = await _appUserValidationService.ValidateAsync(appUserId);
+            if (!appUserValidationResult.Success)
+                return Response<List<GetPurchaseOrderDTO>>.Fail(appUserValidationResult.Message);
+            
             var result = await _orderRepo.GetIncludingAsync(o => o.AppUserId == appUserId, o => o.OrderLines);
             if (!result.Success)
                 return Response<List<GetPurchaseOrderDTO>>.Fail(result.Message);
