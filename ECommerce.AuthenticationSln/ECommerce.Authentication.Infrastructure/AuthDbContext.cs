@@ -1,6 +1,5 @@
 ﻿using ECommerce.Authentication.Domain.Entities;
 using ECommerce.Authentication.Infrastructure.Configurations;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

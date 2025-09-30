@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using ECommerce.Common.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace ECommerce.Common.DependencyInjection
 {
@@ -10,29 +9,19 @@ namespace ECommerce.Common.DependencyInjection
     {
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
         {
-            var key = config["JWTAuthentication:Key"] ?? throw new ArgumentNullException("JWTAuthentication:Key is missing");
-            var issuer = config["JWTAuthentication:Issuer"] ?? throw new ArgumentNullException("JWTAuthentication:Issuer is missing");
-            var audience = config["JWTAuthentication:Audience"] ?? throw new ArgumentNullException("JWTAuthentication:Audience is missing");
-
-            var encodedKey = Encoding.UTF8.GetBytes(key);
+            var parameters = JwtValidationParametersHelper.GetParameters(config);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = true; // enforce HTTPS in production
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    .AddJwtBearer(options =>
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true, // ensure expired tokens are rejected (refresh token)
-                        ClockSkew = TimeSpan.Zero, // no tolerance
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = issuer,
-                        ValidAudience = audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(encodedKey)
-                    };
-                });
+                        options.RequireHttpsMetadata = true;
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = parameters;
+                    });
+
+            // Register the same parameters for DI in services like TokenService
+            services.AddSingleton(parameters);
+
 
             return services;
         }
