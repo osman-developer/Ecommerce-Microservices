@@ -9,5 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ECommerce.CommonSln\ECommerce.Common\ECommerce.Common.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="15.0.1" />
+	</ItemGroup>
 
 </Project>
