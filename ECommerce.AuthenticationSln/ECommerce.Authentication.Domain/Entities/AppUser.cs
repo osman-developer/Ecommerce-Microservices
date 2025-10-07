@@ -9,5 +9,6 @@ namespace ECommerce.Authentication.Domain.Entities
         public string LastName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; set; }
+        public int? CustomerId { get; set; }
     }
 }

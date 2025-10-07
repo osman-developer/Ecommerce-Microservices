@@ -1,4 +1,5 @@
-﻿using ECommerce.Authentication.Infrastructure.DependencyInjection;
+﻿using ECommerce.Authentication.Infrastructure.Data;
+using ECommerce.Authentication.Infrastructure.DependencyInjection;
 using ECommerce.Authentication.Service.DependencyInjection;
 using ECommerce.Common.LogConfiguration;
 using ECommerce.Common.Middleware;
@@ -30,6 +31,23 @@ builder.Services.AddServices(builder.Configuration);
 // ─── Build App ──────────────────────────────────────────────────────
 var app = builder.Build();
 
+// ─── Seed Database ───────────────────────────────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        // Seed roles and demo users
+        await DbSeeder.SeedAsync(services);
+        Log.Information("Database seeding completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "An error occurred while seeding the database.");
+        throw; // Stop app if seeding fails
+    }
+}
 
 // ─── Middleware Pipeline ──────────────────────────────────────────── 
 app.UseSerilogRequestLogging();
@@ -45,6 +63,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -11,13 +11,17 @@ namespace ECommerce.Common.DependencyInjection
         {
             var parameters = JwtValidationParametersHelper.GetParameters(config);
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = true;
-                        options.SaveToken = true;
-                        options.TokenValidationParameters = parameters;
-                    });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false; // For dev
+                options.SaveToken = true;
+                options.TokenValidationParameters = parameters;
+            });
 
             // Register the same parameters for DI in services like TokenService
             services.AddSingleton(parameters);

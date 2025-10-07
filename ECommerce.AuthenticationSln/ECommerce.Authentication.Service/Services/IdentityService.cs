@@ -51,22 +51,25 @@ namespace ECommerce.Authentication.Service.Services
             };
         }
 
-
         public async Task<AuthenticatedUserDTO?> RegisterAsync(RegisterDTO registerDTO)
         {
             var user = _mapper.Map<AppUser>(registerDTO);
 
-            var result = await _userManager.CreateAsync(user, registerDTO.Password).ConfigureAwait(false);
+            var result = await _userManager.CreateAsync(user, registerDTO.Password);
             if (!result.Succeeded)
             {
-                // TODO: replace with domain-specific exception or error result
-                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+                // Return null or handle errors in a structured way
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return null; // controller will handle and return 400/409
             }
 
-            // Assign default role
-            await _userManager.AddToRoleAsync(user, "Customer").ConfigureAwait(false);
+            // Assign default role if needed
+            if (!await _userManager.IsInRoleAsync(user, "Customer"))
+            {
+                await _userManager.AddToRoleAsync(user, "Customer");
+            }
 
-            var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+            var roles = await _userManager.GetRolesAsync(user);
             var token = _tokenService.GenerateAccessToken(user, roles);
 
             return _mapper.Map<AuthenticatedUserDTO>(user) with
@@ -75,6 +78,7 @@ namespace ECommerce.Authentication.Service.Services
                 Roles = roles
             };
         }
+
 
         public async Task<ForgotPasswordConfirmationDTO> ForgotPasswordAsync(string email)
         {

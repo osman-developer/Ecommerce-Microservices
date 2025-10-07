@@ -27,7 +27,6 @@ namespace ECommerce.Authentication.API.Controllers
                 : Unauthorized(Response<AuthenticatedUserDTO>.Fail("Invalid credentials."));
         }
 
-       
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
@@ -36,12 +35,13 @@ namespace ECommerce.Authentication.API.Controllers
                 return BadRequest(Response<AuthenticatedUserDTO>.Fail("Invalid input."));
 
             var result = await _identityService.RegisterAsync(dto);
-            return result != null
-                ? Ok(Response<AuthenticatedUserDTO>.Ok(result, "Registration successful."))
-                : BadRequest(Response<AuthenticatedUserDTO>.Fail("Registration failed."));
+            if (result == null)
+                return Conflict(Response<AuthenticatedUserDTO>.Fail("Username or Email already exists."));
+
+            return Ok(Response<AuthenticatedUserDTO>.Ok(result, "Registration successful."));
         }
 
-        
+
         [HttpPost("forgot-password")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] string email)

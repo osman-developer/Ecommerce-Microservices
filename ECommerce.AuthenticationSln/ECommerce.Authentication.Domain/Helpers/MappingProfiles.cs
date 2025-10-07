@@ -16,6 +16,17 @@ namespace ECommerce.Authentication.Domain.Helpers
 
             CreateMap<RegisterDTO, AppUser>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<AppUser, AuthenticatedUserDTO>()
+               .ConstructUsing(user => new AuthenticatedUserDTO(
+                   user.Id,
+                   user.Email!,
+                   user.FirstName!,
+                   user.LastName!,
+                   string.Empty,      // Token will be set later
+                   user.CustomerId,   // Optional, can be null
+                   new List<string>() // Roles will be set later
+               ));
         }
     }
 }
