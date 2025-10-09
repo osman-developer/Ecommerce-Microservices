@@ -1,34 +1,60 @@
+﻿using ECommerce.ApiGateway.API.DelegatingHandlers;
+using ECommerce.Common.DependencyInjection;
+using ECommerce.Common.LogConfiguration;
+using Ocelot.Cache.CacheManager;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ─── Configure Logging ──────────────────────────────────────────────
+//serilog registeration
+var logFileName = builder.Configuration["SeriLog:FileName"] ?? "Logs/log";
+var logger = SerilogConfiguration.ConfigureSerilog(logFileName);
+builder.Host.UseSerilog(logger);
+
+
+// Load Ocelot config
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+
+// ─── Services ───────────────────────────────
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowAnyOrigin();
+    });
+});
+
+// Add JWT authentication
+JwtAuthenticationExtensions.AddJwtAuthentication(builder.Services, builder.Configuration);
+
+// Add Ocelot with caching
+builder.Services.AddOcelot(builder.Configuration)
+                .AddCacheManager(x => x.WithDictionaryHandle())
+                .AddDelegatingHandler<AddApiGatewayHeaderHandler>(true);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
+// ─── Middleware Pipeline ───────────────────
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
-var summaries = new[]
+// Use Ocelot at the end
+await app.UseOcelot();
+
+// ─── Run App ────────────────────────────────────────────────────────
+try
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    app.Run();
+}
+finally
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
-
-app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    Log.CloseAndFlush(); // Ensures logs are flushed to files or sinks
 }
