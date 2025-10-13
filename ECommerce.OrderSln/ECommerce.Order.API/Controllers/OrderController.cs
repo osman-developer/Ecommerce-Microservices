@@ -2,11 +2,13 @@
 using ECommerce.Common.Response;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Order.Domain.DTOs.Core.Order;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ECommerce.Order.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;

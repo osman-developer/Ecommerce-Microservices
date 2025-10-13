@@ -19,7 +19,7 @@ namespace ECommerce.Order.Service.Services.Clients
             try
             {   //should later on make it on api gteway
                 // Call the Auth service 
-                var response = await _httpClient.GetAsync($"/api/clients/appuser/{id}");
+                var response = await _httpClient.GetAsync($"/api/Identity/{id}");
 
                 if (!response.IsSuccessStatusCode)
                     return Response<GetAppUserDTO>.Fail("Failed to fetch AppUser from Auth service.");

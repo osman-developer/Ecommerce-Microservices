@@ -1,12 +1,14 @@
 ﻿using ECommerce.Common.Response;
 using ECommerce.Product.Domain.DTOs.Core.Product;
 using ECommerce.Product.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Product.API.Controllers.Core
 {
     [Route("api/core/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -34,6 +36,7 @@ namespace ECommerce.Product.API.Controllers.Core
 
         // POST: api/product/save
         [HttpPost("save")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Save([FromBody] AddOrUpdateProductDto dto)
         {
             if (!ModelState.IsValid)
@@ -45,6 +48,7 @@ namespace ECommerce.Product.API.Controllers.Core
 
         // DELETE: api/product/{id}
         [HttpDelete("{id:int}")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _productService.Delete(id);

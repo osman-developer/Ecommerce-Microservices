@@ -16,7 +16,7 @@ builder.Host.UseSerilog(logger);
 
 
 // Load Ocelot config
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("Config/ocelot.json", optional: false, reloadOnChange: true);
 
 // ─── Services ───────────────────────────────
 builder.Services.AddCors(opt =>

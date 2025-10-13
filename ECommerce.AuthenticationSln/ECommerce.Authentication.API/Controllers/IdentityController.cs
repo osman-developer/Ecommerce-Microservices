@@ -8,6 +8,7 @@ namespace ECommerce.Authentication.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -75,7 +76,6 @@ namespace ECommerce.Authentication.API.Controllers
         }
 
         [HttpPost("sign-out/{userId}")]
-        [Authorize]
         public async Task<IActionResult> SignOut(string userId)
         {
             var success = await _identityService.SignOutAsync(userId);
@@ -86,7 +86,6 @@ namespace ECommerce.Authentication.API.Controllers
 
        
         [HttpGet("{userId}")]
-        [Authorize]
         public async Task<IActionResult> GetUserById(string userId)
         {
             var result = await _identityService.GetUserByIdAsync(userId);
