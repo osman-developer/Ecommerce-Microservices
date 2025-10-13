@@ -5,6 +5,6 @@ namespace ECommerce.Order.Service.Services.Validations.AppUser
 {
     public interface IAppUserValidationService
     {
-        Task<Response<Unit>> ValidateAsync(int id);
+        Task<Response<Unit>> ValidateAsync(string id);
     }
 }

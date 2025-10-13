@@ -6,6 +6,6 @@ namespace ECommerce.Order.Domain.Interfaces.Clients
 {
     public interface IAppUserClientService
     {
-        Task<Response<GetAppUserDTO>> GetAppUserByIdAsync(int id);
+        Task<Response<GetAppUserDTO>> GetAppUserByIdAsync(string id);
     }
 }

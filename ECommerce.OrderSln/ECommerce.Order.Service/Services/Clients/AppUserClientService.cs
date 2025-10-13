@@ -14,12 +14,12 @@ namespace ECommerce.Order.Service.Services.Clients
             _httpClient = httpClient;
         }
 
-        public async Task<Response<GetAppUserDTO>> GetAppUserByIdAsync(int id)
+        public async Task<Response<GetAppUserDTO>> GetAppUserByIdAsync(string id)
         {
             try
             {   //should later on make it on api gteway
                 // Call the Auth service 
-                var response = await _httpClient.GetAsync($"/api/Identity/{id}");
+                var response = await _httpClient.GetAsync($"http://localhost:5004/api/identity/{id}");
 
                 if (!response.IsSuccessStatusCode)
                     return Response<GetAppUserDTO>.Fail("Failed to fetch AppUser from Auth service.");

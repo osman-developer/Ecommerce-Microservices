@@ -7,7 +7,7 @@ namespace ECommerce.Order.Domain.DTOs.Core.Order
     public record AddOrUpdatePurchaseOrderDTO
      (
          int? Id,
-         [Required] int AppUserId,
+         [Required] string AppUserId,
          [Required] decimal TotalAmount,
          [Required] List<AddOrUpdateOrderLineDTO> OrderLines
      );

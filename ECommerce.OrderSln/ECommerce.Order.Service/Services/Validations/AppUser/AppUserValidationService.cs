@@ -13,7 +13,7 @@ namespace ECommerce.Order.Service.Services.Validations.AppUser
             _appUserClientService = appUserClientService;
         }
 
-        public async Task<Response<Unit>> ValidateAsync(int id)
+        public async Task<Response<Unit>> ValidateAsync(string id)
         {
             // Call Auth service to validate user
             var userResp = await _appUserClientService.GetAppUserByIdAsync(id);

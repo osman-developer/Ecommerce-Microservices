@@ -97,7 +97,7 @@ namespace ECommerce.Order.Service.Services.Core
             return await _orderRepo.DeleteAsync(id);
         }
 
-        public async Task<Response<List<GetPurchaseOrderDTO>>> GetPurchaseOrdersByClientId(int appUserId)
+        public async Task<Response<List<GetPurchaseOrderDTO>>> GetPurchaseOrdersByClientId(string appUserId)
         {
             // Validate appuser
             var appUserValidationResult = await _appUserValidationService.ValidateAsync(appUserId);

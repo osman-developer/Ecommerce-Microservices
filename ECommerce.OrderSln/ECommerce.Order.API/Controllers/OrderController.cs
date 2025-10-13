@@ -56,7 +56,7 @@ namespace ECommerce.Order.API.Controllers
 
         // GET: api/purchaseorder/client/{appUserId}
         [HttpGet("client/{appUserId:int}")]
-        public async Task<IActionResult> GetByClientId(int appUserId)
+        public async Task<IActionResult> GetByClientId(string appUserId)
         {
             var result = await _orderService.GetPurchaseOrdersByClientId(appUserId);
             return result.Success ? Ok(result) : NotFound(result);
