@@ -3,7 +3,7 @@ namespace ECommerce.Common.DTOs.AppUser
 {
     public record GetAppUserDTO
     (
-        int Id,
+        string Id,
         string UserName,
         string Email,
         string Role,

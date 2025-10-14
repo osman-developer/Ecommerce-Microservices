@@ -20,6 +20,8 @@ namespace ECommerce.Order.Service.DependencyInjection
             // Define resilience policies
             var retryPolicy = GetRetryPolicy();
             var circuitBreakerPolicy = GetCircuitBreakerPolicy();
+            
+            services.AddHttpContextAccessor();
 
             // Register ProductClient with HttpClient + resilience policies
             services.AddHttpClient<IProductClientService, ProductClientService>(client =>

@@ -21,7 +21,7 @@ namespace ECommerce.Order.Service.Services.Core
         private readonly OrderDbContext _context;
         private readonly IProductValidationService _productValidationService;
         private readonly IAppUserValidationService _appUserValidationService;
-
+        
         public OrderService(
             IGenericRepository<PurchaseOrder> orderRepo,
             IGenericRepository<OrderLine> orderLineRepo,

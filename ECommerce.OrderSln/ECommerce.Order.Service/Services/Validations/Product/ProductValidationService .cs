@@ -34,7 +34,9 @@ namespace ECommerce.Order.Service.Services.Validations.Product
                 if (prod.Quantity < line.Quantity)
                     return Response<Unit>.Fail($"Insufficient stock for product {line.ProductId}.");
 
-                if (line.UnitPrice != prod.Price)
+                var linePrice = Math.Round(Convert.ToDecimal(line.UnitPrice), 2);
+                var prodPrice = Math.Round(Convert.ToDecimal(prod.Price), 2);
+                if (linePrice != prodPrice)
                     return Response<Unit>.Fail($"Price mismatch for product {line.ProductId}.");
             }
 
