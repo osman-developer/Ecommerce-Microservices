@@ -7,7 +7,7 @@ namespace ECommerce.Common.Middleware
     {
         public static IApplicationBuilder UseSharedMiddlewares(this IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            app.UseAllowOnlyApiGateway();
+            app.UseAllowOnlyTrusted();
             app.UseGlobalExceptionHandler();
             app.UseCustomStatusCodePages(loggerFactory);
             return app;

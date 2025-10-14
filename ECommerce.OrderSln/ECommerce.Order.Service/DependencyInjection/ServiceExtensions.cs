@@ -1,4 +1,5 @@
-﻿using ECommerce.Order.Domain.Helpers;
+﻿using ECommerce.Common.DelegatingHandlers;
+using ECommerce.Order.Domain.Helpers;
 using ECommerce.Order.Domain.Interfaces.Clients;
 using ECommerce.Order.Domain.Interfaces.Services;
 using ECommerce.Order.Service.Clients;
@@ -20,17 +21,20 @@ namespace ECommerce.Order.Service.DependencyInjection
             // Define resilience policies
             var retryPolicy = GetRetryPolicy();
             var circuitBreakerPolicy = GetCircuitBreakerPolicy();
-            
+
             services.AddHttpContextAccessor();
 
             // Register ProductClient with HttpClient + resilience policies
+            services.AddTransient<AddTrustedHeaderHandler>(sp => new AddTrustedHeaderHandler(sp.GetRequiredService<IConfiguration>(), useInternalApiKey: true));
+
             services.AddHttpClient<IProductClientService, ProductClientService>(client =>
             {
                 client.BaseAddress = new Uri(config["Services:ProductServiceBaseUrl"]);
                 client.Timeout = TimeSpan.FromSeconds(10);
             })
             .AddPolicyHandler(retryPolicy)
-            .AddPolicyHandler(circuitBreakerPolicy);
+            .AddPolicyHandler(circuitBreakerPolicy)
+            .AddHttpMessageHandler<AddTrustedHeaderHandler>();
 
             // Register AppUserClient with HttpClient + resilience policies
             services.AddHttpClient<IAppUserClientService, AppUserClientService>(client =>
@@ -39,7 +43,8 @@ namespace ECommerce.Order.Service.DependencyInjection
                 client.Timeout = TimeSpan.FromSeconds(10);
             })
             .AddPolicyHandler(retryPolicy)
-            .AddPolicyHandler(circuitBreakerPolicy);
+            .AddPolicyHandler(circuitBreakerPolicy)
+            .AddHttpMessageHandler<AddTrustedHeaderHandler>();
 
             // Add Autoppaer registeration
             services.AddAutoMapper(cfg => { }, typeof(MappingProfiles).Assembly);

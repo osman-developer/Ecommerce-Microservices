@@ -23,7 +23,7 @@ namespace ECommerce.Order.Service.Clients
                     return Response<List<ProductDTO>>.Ok(new List<ProductDTO>(), "No products requested.");
 
                 var query = string.Join("&", ids.Select(id => $"productIds={id}"));
-                //should later on make it on api gteway
+                
                 var response = await _httpClient.GetAsync($"/api/clients/product/byIds?{query}");
 
                 if (!response.IsSuccessStatusCode)

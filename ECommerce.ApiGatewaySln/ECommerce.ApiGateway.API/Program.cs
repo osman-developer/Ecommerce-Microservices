@@ -1,4 +1,4 @@
-﻿using ECommerce.ApiGateway.API.DelegatingHandlers;
+﻿using ECommerce.Common.DelegatingHandlers;
 using ECommerce.Common.DependencyInjection;
 using ECommerce.Common.LogConfiguration;
 using Ocelot.Cache.CacheManager;
@@ -32,10 +32,13 @@ builder.Services.AddCors(opt =>
 // Add JWT authentication
 JwtAuthenticationExtensions.AddJwtAuthentication(builder.Services, builder.Configuration);
 
+builder.Services.AddTransient<AddTrustedHeaderHandler>(sp =>
+    new AddTrustedHeaderHandler(sp.GetRequiredService<IConfiguration>(), useInternalApiKey: false));
+
 // Add Ocelot with caching
 builder.Services.AddOcelot(builder.Configuration)
                 .AddCacheManager(x => x.WithDictionaryHandle())
-                .AddDelegatingHandler<AddApiGatewayHeaderHandler>(true);
+                .AddDelegatingHandler<AddTrustedHeaderHandler>(true); // every route
 
 var app = builder.Build();
 
