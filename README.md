@@ -1,7 +1,7 @@
  
 # 🛒 ECommerce Microservices
 
-A modular **eCommerce microservices application** built with **.NET 8**, applying a clean **Onion Architecture** and a **Common shared project** to ensure high reusability, maintainability, and separation of concerns.
+A modular & production-grade **eCommerce microservices application** built with **.NET 8**, applying a clean microservice architecture, Onion design pattern and following best practices. Each service operates independently and communicates securely through an API Gateway that manages routing, authentication, rate limiting, and reliability policies. The solution emphasizes clean architecture, reusability, and maintainability through a dedicated Common project that provides shared middleware, handlers, helpers, and repository abstractions. It integrates caching, retry strategies, and centralized exception handling to ensure consistent performance and fault tolerance across all services. Extensive unit and integration testing validate every layer, ensuring reliability and stability in distributed environments — making this setup ideal for enterprise-grade, cloud-ready eCommerce systems.
 
 ---
 
