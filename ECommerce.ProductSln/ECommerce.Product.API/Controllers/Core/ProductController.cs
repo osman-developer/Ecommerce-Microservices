@@ -8,7 +8,7 @@ namespace ECommerce.Product.API.Controllers.Core
 {
     [Route("api/core/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -20,6 +20,7 @@ namespace ECommerce.Product.API.Controllers.Core
 
         // GET: api/product
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var result = await _productService.GetAll();
@@ -28,6 +29,7 @@ namespace ECommerce.Product.API.Controllers.Core
 
         // GET: api/product/{id}
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _productService.Get(id);
