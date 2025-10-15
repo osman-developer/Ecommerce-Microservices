@@ -23,7 +23,8 @@ The solution is divided into several layers and projects:
 - `AllowOnlyTrustedMiddleware` → allows requests only from trusted internal services using API keys.
 - `AddTrustedHeaderHandler` → automatically attaches trusted headers for inter-service communication.
 - `JwtValidationParametersHelper` → centralizes JWT token validation configuration.
-
+- `GlobalExceptionHandler` → centralized exception and logging middleware.
+  
 ### ⚡ Reliability & Resilience
 - Built-in **retry strategies** for transient network issues.  
 - **Caching** and **rate limiting** support in the Gateway to optimize performance.
@@ -32,7 +33,7 @@ The solution is divided into several layers and projects:
 - `IGenericRepository<T>` → reusable repository pattern across services.  
 - `Response<T>` → unified API response model for all endpoints.  
 - `SharedServiceExtensions` → extension methods for dependency injection setup.  
-- `GlobalExceptionHandler` → centralized exception and logging middleware.
+
 
 ---
 
@@ -41,7 +42,7 @@ The solution is divided into several layers and projects:
 The **ECommerce.Common** layer promotes clean reusability and consistency:
 - Dependency injection helpers for all services.
 - Middleware enforcing internal trust policies.
-- Shared models and utilities to avoid code duplication.
+- Shared models,DTOs and utilities to avoid code duplication.
 - A foundation for consistent logging and error handling across microservices.
 
 ---
@@ -52,8 +53,6 @@ Unit and integration tests are included to validate API endpoints, repository lo
 
 **Tools used:**
 - **xUnit** for test organization and assertions.  
-- **Moq** for mocking dependencies.  
-- **WebApplicationFactory** for end-to-end API testing scenarios.
 
 These tests ensure each service functions correctly, API routes are valid, and communication between services through the Gateway remains reliable.
 
